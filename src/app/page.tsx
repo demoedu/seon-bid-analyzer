@@ -51,7 +51,7 @@ export default function Home() {
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-3 border-b bg-purple-950 shrink-0">
+      <header className="flex items-center justify-between px-6 py-3 border-b bg-white shrink-0">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-gray-900">선엔지니어링 입찰 공고 분석기</span>
         </div>
@@ -75,7 +75,7 @@ export default function Home() {
 
       <div className="flex-1 flex overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-72 border-r bg-purple-950 overflow-y-auto flex-shrink-0">
+        <aside className="w-72 border-r bg-white overflow-y-auto flex-shrink-0">
           {sortedBids.map(bid => (
             <BidSidebarRow
               key={bid.id}
@@ -92,7 +92,7 @@ export default function Home() {
         </aside>
 
         {/* Main panel */}
-        <main className="flex-1 overflow-y-auto bg-purple-950">
+        <main className="flex-1 overflow-y-auto bg-white">
           {selectedBid ? (
             <BidDetailPanel
               bid={selectedBid}
