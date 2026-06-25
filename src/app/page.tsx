@@ -53,8 +53,7 @@ export default function Home() {
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-3 border-b bg-white shrink-0">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-gray-900">입찰 공고 분석기</span>
-          <span className="text-gray-400 text-sm">| 선엔지니어링</span>
+          <span className="font-semibold text-gray-900">선엔지니어링 입찰 공고 분석기</span>
         </div>
         <label className={`cursor-pointer px-3 py-1.5 text-white rounded text-sm transition-colors ${loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}>
           {loading ? '분석 중...' : '+ PDF 업로드'}
@@ -76,7 +75,7 @@ export default function Home() {
 
       <div className="flex-1 flex overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-72 border-r bg-gray-50 overflow-y-auto flex-shrink-0">
+        <aside className="w-72 border-r bg-white overflow-y-auto flex-shrink-0">
           {sortedBids.map(bid => (
             <BidSidebarRow
               key={bid.id}
