@@ -24,8 +24,8 @@
 **방법 2. git clone (터미널)**
 
 ```bash
-git clone https://github.com/seungwonme/입찰공고분석기.git
-cd 입찰공고분석기
+git clone https://github.com/seungwonme/seon-bid-analyzer.git
+cd seon-bid-analyzer
 ```
 
 ## 실행하는 방법
