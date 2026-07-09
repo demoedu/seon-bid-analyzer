@@ -6,6 +6,9 @@ import { createClient } from '@/lib/supabase/client'
 
 type Mode = 'password' | 'magic-link'
 
+const ALLOWED_DOMAIN = 'jocodingax.ai'
+const isAllowedDomain = (email: string) => email.trim().toLowerCase().endsWith(`@${ALLOWED_DOMAIN}`)
+
 export default function LoginPage() {
   const router = useRouter()
   const [mode, setMode] = useState<Mode>('password')
@@ -28,9 +31,10 @@ export default function LoginPage() {
   }
 
   const handleSignUp = async () => {
-    setLoading(true)
     setError(null)
     setMessage(null)
+    if (!isAllowedDomain(email)) { setError(`회사 이메일(@${ALLOWED_DOMAIN})로만 가입할 수 있습니다.`); return }
+    setLoading(true)
     const supabase = createClient()
     const { error } = await supabase.auth.signUp({
       email,
@@ -43,9 +47,10 @@ export default function LoginPage() {
   }
 
   const handleMagicLink = async () => {
-    setLoading(true)
     setError(null)
     setMessage(null)
+    if (!isAllowedDomain(email)) { setError(`회사 이메일(@${ALLOWED_DOMAIN})로만 로그인할 수 있습니다.`); return }
+    setLoading(true)
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithOtp({
       email,
