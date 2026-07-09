@@ -9,6 +9,7 @@ import { WarningBanner } from '@/components/WarningBanner'
 import { UploadZone } from '@/components/UploadZone'
 import { BidSidebarRow } from '@/components/BidSidebarRow'
 import { BidDetailPanel } from '@/components/BidDetailPanel'
+import { LogoutButton } from '@/components/LogoutButton'
 
 export default function Home() {
   const [bids, setBids] = useState<BidAnnouncement[]>([])
@@ -65,20 +66,23 @@ export default function Home() {
         <div className="flex items-center gap-2">
           <span className="font-semibold text-gray-900">선엔지니어링 입찰 공고 분석기</span>
         </div>
-        <label className={`cursor-pointer px-3 py-1.5 text-white rounded text-sm transition-colors ${loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}>
-          {loading ? '분석 중...' : '+ PDF 업로드'}
-          <input
-            type="file"
-            accept=".pdf"
-            className="hidden"
-            disabled={loading}
-            onChange={e => {
-              const file = e.target.files?.[0]
-              if (file) handleUpload(file)
-              e.target.value = ''
-            }}
-          />
-        </label>
+        <div className="flex items-center gap-2">
+          <label className={`cursor-pointer px-3 py-1.5 text-white rounded text-sm transition-colors ${loading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}>
+            {loading ? '분석 중...' : '+ PDF 업로드'}
+            <input
+              type="file"
+              accept=".pdf"
+              className="hidden"
+              disabled={loading}
+              onChange={e => {
+                const file = e.target.files?.[0]
+                if (file) handleUpload(file)
+                e.target.value = ''
+              }}
+            />
+          </label>
+          <LogoutButton />
+        </div>
       </header>
 
       <WarningBanner />
