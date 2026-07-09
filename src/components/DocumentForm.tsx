@@ -22,7 +22,7 @@ export function DocumentForm({ bid }: Props) {
   const [projects, setProjects] = useState<SimilarProject[]>([])
   const [engineers, setEngineers] = useState<Engineer[]>([])
 
-  useEffect(() => { setCompany(loadCompanyInfo()) }, [])
+  useEffect(() => { loadCompanyInfo().then(setCompany) }, [])
 
   const updateCompany = (field: keyof CompanyInfo, value: string) => {
     const updated = { ...company, [field]: value }
