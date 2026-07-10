@@ -132,5 +132,20 @@ export function extractFields(
 
   const checklist = extractChecklist(text)
 
-  return { fileName, title, organization, estimatedAmount, servicePeriod, deadline, qualification, checklist }
+  return {
+    fileName,
+    title,
+    organization,
+    estimatedAmount,
+    servicePeriod,
+    deadline,
+    qualification,
+    checklist,
+    source: 'pdf',
+    bidNtceNo: null,
+    bidNtceOrd: null,
+    baseAmount: null,
+    participationRegions: null,
+    licenseLimits: null,
+  }
 }

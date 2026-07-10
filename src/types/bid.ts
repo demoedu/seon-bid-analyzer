@@ -17,6 +17,14 @@ export interface BidAnnouncement {
   deadline: string | null
   qualification: string | null
   checklist: ChecklistItem[]
+  /** 'pdf': PDF 업로드로 추출, 'api': 나라장터 공고 검색으로 가져옴 */
+  source: 'pdf' | 'api'
+  /** 나라장터 입찰공고번호 (API로 가져온 공고만 존재) */
+  bidNtceNo: string | null
+  bidNtceOrd: string | null
+  baseAmount: string | null
+  participationRegions: string[] | null
+  licenseLimits: string[] | null
 }
 
 export interface CompanyInfo {

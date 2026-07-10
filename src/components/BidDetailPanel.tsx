@@ -12,6 +12,7 @@ interface Props {
   bid: BidAnnouncement
   onUpdateChecklist: (checklist: ChecklistItem[]) => void
   onDelete: () => void
+  onCheckChanges: () => void
 }
 
 const OVERVIEW_FIELDS = [
@@ -22,7 +23,7 @@ const OVERVIEW_FIELDS = [
   { label: '파일명', key: 'fileName' },
 ] as const
 
-export function BidDetailPanel({ bid, onUpdateChecklist, onDelete }: Props) {
+export function BidDetailPanel({ bid, onUpdateChecklist, onDelete, onCheckChanges }: Props) {
   const [tab, setTab] = useState<Tab>('개요')
 
   return (
@@ -37,6 +38,14 @@ export function BidDetailPanel({ bid, onUpdateChecklist, onDelete }: Props) {
         </div>
         <div className="flex items-center gap-3 shrink-0">
           <DayBadge deadline={bid.deadline} />
+          {bid.source === 'api' && bid.bidNtceNo && (
+            <button
+              onClick={onCheckChanges}
+              className="text-xs text-blue-500 hover:text-blue-700 border border-blue-200 hover:border-blue-300 rounded px-2 py-1 transition-colors"
+            >
+              변경 확인
+            </button>
+          )}
           <button
             onClick={onDelete}
             className="text-xs text-gray-400 hover:text-red-500 border border-gray-200 hover:border-red-300 rounded px-2 py-1 transition-colors"
@@ -77,6 +86,24 @@ export function BidDetailPanel({ bid, onUpdateChecklist, onDelete }: Props) {
                     </td>
                   </tr>
                 ))}
+                {bid.baseAmount && (
+                  <tr className="border-b last:border-0">
+                    <td className="py-3 pr-6 text-gray-500 font-medium w-28 align-top">기초금액</td>
+                    <td className="py-3 text-gray-900">{bid.baseAmount}</td>
+                  </tr>
+                )}
+                {bid.participationRegions && (
+                  <tr className="border-b last:border-0">
+                    <td className="py-3 pr-6 text-gray-500 font-medium w-28 align-top">참가가능지역</td>
+                    <td className="py-3 text-gray-900">{bid.participationRegions.join(', ')}</td>
+                  </tr>
+                )}
+                {bid.licenseLimits && (
+                  <tr className="border-b last:border-0">
+                    <td className="py-3 pr-6 text-gray-500 font-medium w-28 align-top">면허제한</td>
+                    <td className="py-3 text-gray-900">{bid.licenseLimits.join(', ')}</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

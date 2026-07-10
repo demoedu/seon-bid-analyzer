@@ -51,6 +51,12 @@ function bidToDbRow(bid: BidAnnouncement) {
     deadline: bid.deadline,
     qualification: bid.qualification,
     checklist: bid.checklist,
+    source: bid.source,
+    bid_ntce_no: bid.bidNtceNo,
+    bid_ntce_ord: bid.bidNtceOrd,
+    base_amount: bid.baseAmount,
+    participation_regions: bid.participationRegions,
+    license_limits: bid.licenseLimits,
   }
 }
 
@@ -66,5 +72,11 @@ function dbRowToBid(row: Record<string, unknown>): BidAnnouncement {
     deadline: row.deadline as string | null,
     qualification: row.qualification as string | null,
     checklist: row.checklist as BidAnnouncement['checklist'],
+    source: (row.source as BidAnnouncement['source']) ?? 'pdf',
+    bidNtceNo: row.bid_ntce_no as string | null,
+    bidNtceOrd: row.bid_ntce_ord as string | null,
+    baseAmount: row.base_amount as string | null,
+    participationRegions: row.participation_regions as string[] | null,
+    licenseLimits: row.license_limits as string[] | null,
   }
 }
