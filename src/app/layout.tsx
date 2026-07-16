@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "선엔지니어링 입찰 공고 분석기",
   description: "나라장터 입찰 공고 PDF를 업로드하면 핵심 정보를 자동으로 정리합니다.",
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({
@@ -24,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ko"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>

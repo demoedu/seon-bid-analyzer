@@ -1,14 +1,3 @@
-import {
-  Document,
-  Packer,
-  Paragraph,
-  Table,
-  TableRow,
-  TableCell,
-  TextRun,
-  HeadingLevel,
-  WidthType,
-} from 'docx'
 import type { CompanyInfo, SimilarProject, Engineer } from '@/types/bid'
 
 interface ExportInput {
@@ -18,26 +7,38 @@ interface ExportInput {
   engineers: Engineer[]
 }
 
-function headerRow(labels: string[]): TableRow {
-  return new TableRow({
-    children: labels.map(
-      text =>
-        new TableCell({
-          children: [new Paragraph({ children: [new TextRun({ text, bold: true })] })],
-        })
-    ),
-  })
-}
-
-function dataRow(values: string[]): TableRow {
-  return new TableRow({
-    children: values.map(
-      text => new TableCell({ children: [new Paragraph(text)] })
-    ),
-  })
-}
-
 export async function exportDocx({ bidTitle, company, projects, engineers }: ExportInput) {
+  const {
+    Document,
+    Packer,
+    Paragraph,
+    Table,
+    TableRow,
+    TableCell,
+    TextRun,
+    HeadingLevel,
+    WidthType,
+  } = await import('docx')
+
+  function headerRow(labels: string[]) {
+    return new TableRow({
+      children: labels.map(
+        text =>
+          new TableCell({
+            children: [new Paragraph({ children: [new TextRun({ text, bold: true })] })],
+          })
+      ),
+    })
+  }
+
+  function dataRow(values: string[]) {
+    return new TableRow({
+      children: values.map(
+        text => new TableCell({ children: [new Paragraph(text)] })
+      ),
+    })
+  }
+
   const doc = new Document({
     sections: [
       {

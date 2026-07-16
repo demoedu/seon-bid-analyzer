@@ -30,6 +30,16 @@ export function UploadZone({ onUpload, loading }: Props) {
       onDragOver={e => { e.preventDefault(); setDragging(true) }}
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
+      role="button"
+      tabIndex={loading ? -1 : 0}
+      aria-disabled={loading}
+      onKeyDown={e => {
+        if (loading) return
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          inputRef.current?.click()
+        }
+      }}
       className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors select-none ${
         loading ? 'opacity-50 cursor-not-allowed border-gray-200' :
         dragging ? 'border-blue-400 bg-blue-50 cursor-copy' :

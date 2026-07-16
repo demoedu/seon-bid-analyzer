@@ -16,10 +16,11 @@ export default function Home() {
   const [bids, setBids] = useState<BidAnnouncement[]>([])
   const [selectedBidId, setSelectedBidId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [bidsLoading, setBidsLoading] = useState(true)
   const [showSearch, setShowSearch] = useState(false)
 
   useEffect(() => {
-    loadBids().then(setBids)
+    loadBids().then(setBids).finally(() => setBidsLoading(false))
   }, [])
 
   const handleUpload = async (file: File) => {
@@ -121,7 +122,7 @@ export default function Home() {
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-3 border-b bg-white shrink-0">
+      <header className="flex flex-wrap items-center justify-between gap-2 px-4 sm:px-6 py-3 border-b bg-white shrink-0">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-gray-900">선엔지니어링 입찰 공고 분석기</span>
         </div>
@@ -156,10 +157,20 @@ export default function Home() {
 
       <WarningBanner />
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col sm:flex-row overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-72 border-r bg-white overflow-y-auto flex-shrink-0">
-          {sortedBids.map(bid => (
+        <aside className="w-full sm:w-72 max-h-56 sm:max-h-none border-b sm:border-b-0 sm:border-r bg-white overflow-y-auto flex-shrink-0">
+          {bidsLoading && (
+            <div className="p-4 flex flex-col gap-3" aria-hidden="true">
+              {[0, 1, 2].map(i => (
+                <div key={i} className="animate-pulse space-y-2">
+                  <div className="h-3.5 bg-gray-200 rounded w-3/4" />
+                  <div className="h-3 bg-gray-100 rounded w-1/2" />
+                </div>
+              ))}
+            </div>
+          )}
+          {!bidsLoading && sortedBids.map(bid => (
             <BidSidebarRow
               key={bid.id}
               bid={bid}
@@ -167,7 +178,7 @@ export default function Home() {
               onClick={() => setSelectedBidId(bid.id)}
             />
           ))}
-          {bids.length === 0 && (
+          {!bidsLoading && bids.length === 0 && (
             <p className="p-4 text-sm text-gray-400">
               PDF를 업로드하면 여기에 공고 목록이 표시됩니다.
             </p>

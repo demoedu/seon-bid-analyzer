@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface SearchResult {
   bidNtceNo: string
@@ -25,6 +25,14 @@ export function SearchBidPanel({ onImport, onClose }: Props) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [importingNo, setImportingNo] = useState<string | null>(null)
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
 
   const handleSearch = async () => {
     setLoading(true)
@@ -63,9 +71,12 @@ export function SearchBidPanel({ onImport, onClose }: Props) {
       <div
         className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[85vh] flex flex-col"
         onClick={e => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="search-bid-title"
       >
         <div className="px-5 py-4 border-b flex items-center justify-between">
-          <h3 className="font-semibold text-gray-900">나라장터 공고 검색으로 가져오기</h3>
+          <h3 id="search-bid-title" className="font-semibold text-gray-900">나라장터 공고 검색으로 가져오기</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-sm">닫기 ✕</button>
         </div>
 
