@@ -21,6 +21,9 @@ export function DocumentForm({ bid }: Props) {
   const [company, setCompany] = useState<CompanyInfo>({ name: '', bizNumber: '' })
   const [projects, setProjects] = useState<SimilarProject[]>([])
   const [engineers, setEngineers] = useState<Engineer[]>([])
+  const [draft, setDraft] = useState('')
+  const [draftLoading, setDraftLoading] = useState(false)
+  const [draftError, setDraftError] = useState<string | null>(null)
 
   useEffect(() => { loadCompanyInfo().then(setCompany) }, [])
 
@@ -36,8 +39,27 @@ export function DocumentForm({ bid }: Props) {
   const updateEngineer = (id: string, field: keyof Engineer, value: string) =>
     setEngineers(prev => prev.map(e => e.id === id ? { ...e, [field]: value } : e))
 
+  const generateDraft = async () => {
+    setDraftLoading(true)
+    setDraftError(null)
+    try {
+      const res = await fetch('/api/documents/draft', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bid, company, projects, engineers }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? '초안 생성에 실패했습니다.')
+      setDraft(data.draft)
+    } catch (err) {
+      setDraftError(err instanceof Error ? err.message : '초안 생성 중 오류가 발생했습니다.')
+    } finally {
+      setDraftLoading(false)
+    }
+  }
+
   const handleExport = () =>
-    exportDocx({ bidTitle: bid.title ?? '공고명 미확인', company, projects, engineers })
+    exportDocx({ bidTitle: bid.title ?? '공고명 미확인', company, projects, engineers, draft })
 
   return (
     <div className="flex flex-col h-full">
@@ -67,6 +89,34 @@ export function DocumentForm({ bid }: Props) {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* AI intro draft */}
+        <section>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-gray-700">참여의향서 도입부 (AI 초안)</h3>
+            <button
+              onClick={generateDraft}
+              disabled={draftLoading}
+              className={`text-xs px-2.5 py-1 rounded text-white transition-colors ${
+                draftLoading ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+              }`}
+            >
+              {draftLoading ? 'AI 초안 생성 중...' : 'AI로 초안 생성'}
+            </button>
+          </div>
+          {draftError && (
+            <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mb-2">
+              {draftError}
+            </p>
+          )}
+          <textarea
+            value={draft}
+            onChange={e => setDraft(e.target.value)}
+            placeholder="AI로 초안을 생성하거나 직접 작성하세요. 회사 정보·실적·기술자를 입력한 뒤 생성하면 더 정확합니다."
+            rows={6}
+            className="w-full text-sm border rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-400 resize-y"
+          />
         </section>
 
         {/* Similar projects */}

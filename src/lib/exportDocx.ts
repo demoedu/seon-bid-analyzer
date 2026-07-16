@@ -5,9 +5,10 @@ interface ExportInput {
   company: CompanyInfo
   projects: SimilarProject[]
   engineers: Engineer[]
+  draft?: string
 }
 
-export async function exportDocx({ bidTitle, company, projects, engineers }: ExportInput) {
+export async function exportDocx({ bidTitle, company, projects, engineers, draft }: ExportInput) {
   const {
     Document,
     Packer,
@@ -50,6 +51,14 @@ export async function exportDocx({ bidTitle, company, projects, engineers }: Exp
             ],
           }),
           new Paragraph({ text: '' }),
+
+          ...(draft?.trim()
+            ? [
+                new Paragraph({ text: '참여의향서 도입부', heading: HeadingLevel.HEADING_2 }),
+                ...draft.split('\n').map(line => new Paragraph(line)),
+                new Paragraph({ text: '' }),
+              ]
+            : []),
 
           new Paragraph({ text: '유사용역 실적', heading: HeadingLevel.HEADING_2 }),
           new Table({
